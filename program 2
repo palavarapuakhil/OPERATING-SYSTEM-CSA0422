@@ -1,0 +1,37 @@
+#include <stdio.h>
+
+int main() {
+    int frames[3], pages[8], faults = 0, i, j, k, flag;
+    printf("Enter the page reference sequence: ");
+    for(i = 0; i < 8; ++i) {
+        scanf("%d", &pages[i]);
+    }
+    for(i = 0; i < 3; ++i) {
+        frames[i] = -1;
+    }
+    j = 0;
+    printf("\nPage\t Frames\n");
+    for(i = 0; i < 8; ++i) {
+        flag = 0;
+        for(k = 0; k < 3; ++k) {
+            if(frames[k] == pages[i]) {
+                flag = 1;
+                break;
+            }
+        }
+        if(flag == 0) {
+            frames[j] = pages[i];
+            ++j;
+            if(j > 2) {
+                j = 0;
+            }
+            ++faults;
+        }
+        printf("\n%d\t", pages[i]);
+        for(k = 0; k < 3; ++k) {
+            printf("%d\t", frames[k]);
+        }
+    }
+    printf("\nTotal Page Faults: %d\n", faults);
+    return 0;
+}
