@@ -1,0 +1,27 @@
+int main()
+{
+    int queue[MAX];
+    int head, n, i, j, seek_time = 0, diff;
+
+    printf("Enter the number of tracks: ");
+    scanf("%d", &n);
+
+    printf("Enter the track position: ");
+    for (i = 1; i <= n; i++) {
+        scanf("%d", &queue[i]);
+    }
+
+    printf("Enter the initial head position: ");
+    scanf("%d", &head);
+
+    queue[0] = head;
+    for (i = 0; i < n; i++) {
+        diff = abs(queue[i] - queue[i+1]);
+        seek_time += diff;
+    }
+
+    printf("Total head movement: %d\n", seek_time);
+    printf("Average head movement: %.2f\n", (float) seek_time / n);
+
+    return 0;
+}
