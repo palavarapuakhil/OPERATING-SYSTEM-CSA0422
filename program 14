@@ -1,0 +1,51 @@
+#include <stdio.h>
+
+#define MAX_PAGES 100
+
+int main() {
+    int page_frames = 3;
+    int page_reference_sequence[MAX_PAGES] = {7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2, 1, 2, 0, 1, 7, 0, 1};
+    int num_pages = 20;
+    int page_faults = 0;
+    int page_table[MAX_PAGES];
+    int page_table_timestamps[MAX_PAGES];
+
+    for (int i = 0; i < page_frames; i++) {
+        page_table[i] = -1;
+        page_table_timestamps[i] = -1;
+    }
+
+    for (int i = 0; i < num_pages; i++) {
+        int page = page_reference_sequence[i];
+        int found = 0;
+        for (int j = 0; j < page_frames; j++) {
+            if (page_table[j] == page) {
+                found = 1;
+                break;
+            }
+        }
+        if (!found) {
+            int replace_index = -1;
+            int max_future_use = -1;
+            for (int j = 0; j < page_frames; j++) {
+                int future_use = num_pages;
+                for (int k = i + 1; k < num_pages; k++) {
+                    if (page_reference_sequence[k] == page_table[j]) {
+                        future_use = k;
+                        break;
+                    }
+                }
+                if (future_use > max_future_use) {
+                    max_future_use = future_use;
+                    replace_index = j;
+                }
+            }
+            page_table[replace_index] = page;
+            page_table_timestamps[replace_index] = i;
+            page_faults++;
+        }
+    }
+
+    printf("Page faults: %d\n", page_faults);
+    return 0;
+}
