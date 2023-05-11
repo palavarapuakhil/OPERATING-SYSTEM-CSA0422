@@ -1,0 +1,21 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+#define MAX_REQUESTS 100
+
+int main() {
+    int num_requests = 9;
+    int request_sequence[MAX_REQUESTS] = {55, 58, 60, 70, 18, 90, 150, 160, 184};
+    int current_track = 50;
+    int total_head_movement = 0;
+
+    for (int i = 0; i < num_requests; i++) {
+        int distance = abs(request_sequence[i] - current_track);
+        total_head_movement += distance;
+        current_track = request_sequence[i];
+    }
+
+    printf("Average head movement: %f\n", (float)total_head_movement / num_requests);
+    return 0;
+}
