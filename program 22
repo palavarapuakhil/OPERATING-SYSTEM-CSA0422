@@ -1,0 +1,100 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_USERS 3
+#define MAX_FILES 2
+
+struct Directory {
+    char name[20];
+    char files[MAX_FILES][20];
+    int file_count;kl
+};
+
+struct UserDirectory {
+    char name[20];
+    struct Directory directory;
+};
+
+struct UserDirectory user_directories[MAX_USERS];
+
+void initializeUserDirectories() {
+    for (int i = 0; i < MAX_USERS; i++) {
+        strcpy(user_directories[i].name, "");
+        strcpy(user_directories[i].directory.name, "");
+        user_directories[i].directory.file_count = 0;
+    }
+}
+
+int createUserDirectory(char *username) {
+    for (int i = 0; i < MAX_USERS; i++) {
+        if (strcmp(user_directories[i].name, "") == 0) {
+            strcpy(user_directories[i].name, username);
+            return i;
+        }
+    }
+    return 0;
+}
+
+int findUserDirectoryIndex(char *username) {
+    for (int i = 0; i < MAX_USERS; i++) {
+        if (strcmp(user_directories[i].name, username) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void createFile(char *username, char *filename) {
+    int user_directory_index = findUserDirectoryIndex(username);
+    if (user_directory_index != -1) {
+        struct Directory *directory = &user_directories[user_directory_index].directory;
+        if (directory->file_count < MAX_FILES) {
+            strcpy(directory->files[directory->file_count], filename);
+            directory->file_count++;
+            printf("File '%s' created successfully in '%s' directory.\n", filename, username);
+        } else {
+            printf("Maximum file limit reached for directory '%s'.\n", username);
+        }
+    } else {
+        printf("User directory '%s' not found.\n", username);
+    }
+}
+
+void displayUserDirectories() {
+    printf("User Directories:\n");
+    for (int i = 0; i < MAX_USERS; i++) {
+        if (strcmp(user_directories[i].name, "") != 0) {
+            printf("- %s\n", user_directories[i].name);
+            struct Directory *directory = &user_directories[i].directory;
+            printf("  Files:\n");
+            for (int j = 0; j < directory->file_count; j++) {
+                printf("  - %s\n", directory->files[j]);
+            }
+        }
+    }
+}
+
+int main() {
+    initializeUserDirectories();
+
+    int user1_index = createUserDirectory("user1");
+    int user2_index = createUserDirectory("user2");
+    int user3_index = createUserDirectory("user3");
+
+    if (user1_index != -1) {
+        createFile("user1", "file1.txt");
+        createFile("user1", "file2.txt");
+    }
+    if (user2_index != -1) {
+        createFile("user2", "file3.txt");
+        createFile("user2", "file4.txt");
+    }
+    if (user3_index != -1) {
+        createFile("user3", "file5.txt");
+        createFile("user3", "file6.txt");
+    }
+
+    displayUserDirectories();
+
+    return 0;
+}
