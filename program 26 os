@@ -1,0 +1,20 @@
+#include <stdio.h>
+
+int main() {
+    // File creation and writing
+    FILE *file = fopen("example.txt", "w");
+    fprintf(file, "Hello, File Management!\n");
+    fclose(file);
+
+    // File reading
+    file = fopen("example.txt", "r");
+    char buffer[100];
+    fgets(buffer, sizeof(buffer), file);
+    printf("File content: %s", buffer);
+    fclose(file);
+
+    // File deletion
+    remove("example.txt");
+
+    return 0;
+}
