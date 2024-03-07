@@ -1,0 +1,25 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main() {
+    FILE *file = fopen("example.txt", "r");
+    if (file == NULL) {
+        perror("Error opening file");
+        return EXIT_FAILURE;
+    }
+
+    char search_term[100];
+    printf("Enter search term: ");
+    scanf("%s", search_term);
+
+    char line[256];
+    while (fgets(line, sizeof(line), file) != NULL) {
+        if (strstr(line, search_term) != NULL) {
+            printf("%s", line);
+        }
+    }
+
+    fclose(file);
+    return 0;
+}
